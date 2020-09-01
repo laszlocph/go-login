@@ -20,9 +20,10 @@ type Middleware interface {
 
 // Token represents an authorization token.
 type Token struct {
-	Access  string
-	Refresh string
-	Expires time.Time
+	Access   string
+	Refresh  string
+	Expires  time.Time
+	AppState string
 }
 
 type key int

@@ -11,14 +11,14 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/drone/go-login/login"
-	"github.com/drone/go-login/login/bitbucket"
-	"github.com/drone/go-login/login/github"
-	"github.com/drone/go-login/login/gitlab"
-	"github.com/drone/go-login/login/gitee"
-	"github.com/drone/go-login/login/gogs"
-	"github.com/drone/go-login/login/logger"
-	"github.com/drone/go-login/login/stash"
+	"github.com/laszlocph/go-login/login"
+	"github.com/laszlocph/go-login/login/bitbucket"
+	"github.com/laszlocph/go-login/login/github"
+	"github.com/laszlocph/go-login/login/gitlab"
+	"github.com/laszlocph/go-login/login/gitee"
+	"github.com/laszlocph/go-login/login/gogs"
+	"github.com/laszlocph/go-login/login/logger"
+	"github.com/laszlocph/go-login/login/stash"
 )
 
 var (

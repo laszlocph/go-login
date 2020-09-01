@@ -7,10 +7,11 @@ package oauth2
 import (
 	"errors"
 	"net/http"
+	"strings"
 	"time"
 
-	"github.com/drone/go-login/login"
-	"github.com/drone/go-login/login/logger"
+	"github.com/laszlocph/go-login/login"
+	"github.com/laszlocph/go-login/login/logger"
 )
 
 // Handler returns a Handler that runs h at the completion
@@ -43,6 +44,10 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	code := r.FormValue("code")
 	if len(code) == 0 {
 		state := createState(w)
+		appState := r.FormValue("appState")
+		if appState != "" {
+			state = state + "&" + appState
+		}
 		http.Redirect(w, r, h.conf.authorizeRedirect(state), 303)
 		return
 	}
@@ -52,6 +57,12 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// with the next http.Handler in the chain.
 	state := r.FormValue("state")
 	deleteState(w)
+	appState := ""
+	if strings.Contains(state, "&") {
+		states := strings.Split(state, "&")
+		state = states[0]
+		appState = states[1]
+	}
 	if err := validateState(r, state); err != nil {
 		h.logger().Errorln("oauth: invalid or missing state")
 		ctx = login.WithError(ctx, err)
@@ -79,6 +90,7 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		Expires: time.Now().UTC().Add(
 			time.Duration(source.Expires) * time.Second,
 		),
+		AppState: appState,
 	})
 
 	h.next.ServeHTTP(w, r.WithContext(ctx))
